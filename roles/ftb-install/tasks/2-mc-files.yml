@@ -1,0 +1,31 @@
+---
+- assert:
+    that:
+      - MODPACK_NAME is defined
+      - RCON_PASSWORD is defined
+      - WHITELIST_ENABLE is defined
+
+- name: Create Minecraft service
+  template:
+    src: minecraft.service.j2
+    dest: /etc/systemd/system/minecraft.service
+    mode: '0644'
+
+- name: Create Minecraft eula
+  template:
+    src: eula.txt.j2
+    dest: /opt/minecraft/server/eula.txt
+    mode: '0644'
+
+- name: Create Minecraft server.properties
+  template:
+    src: server.properties.j2
+    dest: /opt/minecraft/server/server.properties
+    mode: '0644'
+
+- name: Create Minecraft whitelist
+  template:
+    src: whitelist.json.j2
+    dest: /opt/minecraft/server/whitelist.json
+    mode: '0644'
+  when: WHITELIST is defined and WHITELIST_ENABLE | bool
