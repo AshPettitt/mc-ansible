@@ -14,15 +14,15 @@
   tasks:
     - name: Initial server requirements
       include_role:
-        name: roles/ftb-install
+        name: roles/mc-install
         tasks_from: 1-mc-init.yml
 
     - name: Create MC server files
       include_role:
-        name: roles/ftb-install
+        name: roles/mc-install
         tasks_from: 2-mc-files.yml
 
     - name: Install and configure FTB server
       include_role:
-        name: roles/ftb-install
+        name: roles/mc-install
         tasks_from: 3-mc-server.yml

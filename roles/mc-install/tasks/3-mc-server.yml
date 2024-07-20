@@ -2,7 +2,7 @@
 - assert:
     that:
       - MODPACK_URL is defined
-      - MODPACK_SCRIPT is defined
+      - MODPACK_TYPE is defined
 
 - name: Clone mcrcon repository
   git:
@@ -25,12 +25,28 @@
   file:
     path: /opt/minecraft/server/{{ MODPACK_SCRIPT }}
     mode: '0755'
+  when: MODPACK_TYPE == "ftb"
 
 - name: Run modpack script
   command:
     cmd: ./{{ MODPACK_SCRIPT }} --auto
     args:
       chdir: /opt/minecraft/server
+  when: MODPACK_TYPE == "ftb"
+
+- name: Unzip modpack
+  command:
+    cmd: unzip download
+    args:
+      chdir: /opt/minecraft/server
+  when: MODPACK_TYPE == "curse"
+
+- name: Move modpack files
+  command:
+    cmd: mv */* . && mv startserver.sh start.sh
+    args:
+      chdir: /opt/minecraft/server
+  when: MODPACK_TYPE == "curse"
 
 - name: Make start.sh executable
   file:
