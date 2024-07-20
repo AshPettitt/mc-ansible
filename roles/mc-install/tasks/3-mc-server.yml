@@ -15,7 +15,7 @@
     args:
       chdir: /opt/minecraft/tools/mcrcon
 
-- name: Download modpack script
+- name: Download modpack
   command:
     cmd: curl -JLO {{ MODPACK_URL }}
     args:
