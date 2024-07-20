@@ -7,7 +7,7 @@
         that:
           - MODPACK_NAME is defined
           - MODPACK_URL is defined
-          - MODPACK_SCRIPT is defined
+          - MODPACK_TYPE is defined
           - RCON_PASSWORD is defined
           - WHITELIST_ENABLE is defined
 
