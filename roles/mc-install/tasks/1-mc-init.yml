@@ -1,0 +1,23 @@
+---
+- name: Ensure gcc is installed
+  package:
+    name: gcc
+    state: present
+
+- name: Setup Minecraft user
+  user:
+    name: minecraft
+    system: true
+    create_home: true
+    home: /opt/minecraft
+    shell: /bin/bash
+    groups: minecraft
+    state: present
+
+- name: Create directories for Minecraft
+  file:
+    path: /opt/minecraft/{{ item }}
+    state: directory
+  loop:
+    - tools
+    - server

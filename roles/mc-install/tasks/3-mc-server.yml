@@ -1,0 +1,71 @@
+---
+- assert:
+    that:
+      - MODPACK_URL is defined
+      - MODPACK_TYPE is defined
+
+- name: Clone mcrcon repository
+  git:
+    repo: https://github.com/Tiiffi/mcrcon.git
+    dest: /opt/minecraft/tools/mcrcon
+
+- name: Compile mcrcon
+  command:
+    cmd: gcc -std=gnu11 -pedantic -Wall -Wextra -O2 -s -o mcrcon mcrcon.c
+    args:
+      chdir: /opt/minecraft/tools/mcrcon
+
+- name: Download modpack
+  command:
+    cmd: curl -JLO {{ MODPACK_URL }}
+    args:
+      chdir: /opt/minecraft/server
+
+- name: Make modpack script executable
+  file:
+    path: /opt/minecraft/server/{{ MODPACK_SCRIPT }}
+    mode: '0755'
+  when: MODPACK_TYPE == "ftb"
+
+- name: Run modpack script
+  command:
+    cmd: ./{{ MODPACK_SCRIPT }} --auto
+    args:
+      chdir: /opt/minecraft/server
+  when: MODPACK_TYPE == "ftb"
+
+- name: Unzip modpack
+  command:
+    cmd: unzip download
+    args:
+      chdir: /opt/minecraft/server
+  when: MODPACK_TYPE == "curse"
+
+- name: Move modpack files
+  command:
+    cmd: mv */* . && mv startserver.sh start.sh
+    args:
+      chdir: /opt/minecraft/server
+  when: MODPACK_TYPE == "curse"
+
+- name: Make start.sh executable
+  file:
+    path: /opt/minecraft/server/start.sh
+    mode: '0755'
+
+- name: Change ownership of Minecraft directory
+  command:
+    cmd: chown -R minecraft:minecraft /opt/minecraft
+
+- name: Reload systemd to recognize the new service
+  command: systemctl daemon-reload
+
+- name: Enable Minecraft service
+  systemd:
+    name: minecraft
+    enabled: yes
+
+- name: Start Minecraft service
+  systemd:
+    name: minecraft
+    state: started
