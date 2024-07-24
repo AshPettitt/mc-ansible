@@ -4,11 +4,16 @@
     name: gcc
     state: present
 
+- name: Ensure java is installed
+  package:
+    name: java
+    state: present
+
 - name: Create Minecraft group
   group:
     name: minecraft
     state: present
-    
+
 - name: Setup Minecraft user
   user:
     name: minecraft
