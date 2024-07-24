@@ -12,14 +12,14 @@
 - name: Compile mcrcon
   command:
     cmd: gcc -std=gnu11 -pedantic -Wall -Wextra -O2 -s -o mcrcon mcrcon.c
-    args:
-      chdir: /opt/minecraft/tools/mcrcon
+  args:
+    chdir: /opt/minecraft/tools/mcrcon
 
 - name: Download modpack
   command:
     cmd: curl -JLO {{ MODPACK_URL }}
-    args:
-      chdir: /opt/minecraft/server
+  args:
+    chdir: /opt/minecraft/server
 
 - name: Make modpack script executable
   file:
@@ -30,22 +30,22 @@
 - name: Run modpack script
   command:
     cmd: ./{{ MODPACK_SCRIPT }} --auto
-    args:
-      chdir: /opt/minecraft/server
+  args:
+    chdir: /opt/minecraft/server
   when: MODPACK_TYPE == "ftb"
 
 - name: Unzip modpack
   command:
     cmd: unzip download
-    args:
-      chdir: /opt/minecraft/server
+  args:
+    chdir: /opt/minecraft/server
   when: MODPACK_TYPE == "curse"
 
 - name: Move modpack files
   command:
     cmd: mv */* . && mv startserver.sh start.sh
-    args:
-      chdir: /opt/minecraft/server
+  args:
+    chdir: /opt/minecraft/server
   when: MODPACK_TYPE == "curse"
 
 - name: Make start.sh executable
