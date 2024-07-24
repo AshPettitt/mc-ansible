@@ -43,16 +43,12 @@
 
 - name: Move modpack files
   command:
-    cmd: mv {{ MODPACK_VERSION }}/* .
-  args:
-    chdir: /opt/minecraft/server
+    cmd: mv /opt/minecraft/server/{{ MODPACK_VERSION }}/* /opt/minecraft/server/
   when: MODPACK_TYPE == "curse"
 
 - name: Rename modpack script
   command:
-    cmd: mv startserver.sh start.sh
-  args:
-    chdir: /opt/minecraft/server
+    cmd: mv /opt/minecraft/server/startserver.sh /opt/minecraft/server/start.sh
   when: MODPACK_TYPE == "curse"
 
 - name: Make start.sh executable
