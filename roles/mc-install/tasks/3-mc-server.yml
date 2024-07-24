@@ -42,13 +42,26 @@
   when: MODPACK_TYPE == "curse"
 
 - name: Move modpack files
-  command:
-    cmd: mv /opt/minecraft/server/{{ MODPACK_VERSION }}/* /opt/minecraft/server/
+  copy:
+    src: /opt/minecraft/server/{{ MODPACK_VERSION }}/
+    dest: /opt/minecraft/server/
   when: MODPACK_TYPE == "curse"
 
 - name: Rename modpack script
   command:
     cmd: mv /opt/minecraft/server/startserver.sh /opt/minecraft/server/start.sh
+  when: MODPACK_TYPE == "curse"
+
+- name: Remove original modpack files after copy
+  file:
+    path: /opt/minecraft/server/{{ MODPACK_VERSION }}/
+    state: absent
+  when: MODPACK_TYPE == "curse"
+
+- name: Remove modpack download after unzip
+  file:
+    path: /opt/minecraft/server/download
+    state: absent
   when: MODPACK_TYPE == "curse"
 
 - name: Make start.sh executable
