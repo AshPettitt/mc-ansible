@@ -1,5 +1,5 @@
 [Unit]
-Description=FTB Server
+Description=Minecraft Server
 After=network.target
 
 [Service]
@@ -19,7 +19,9 @@ ExecStop=/bin/sleep 5
 ExecStop=/usr/bin/screen -p 0 -S mc -X eval 'stuff "say SERVER SHUTTING DOWN IN 5 SECONDS..."\015'
 ExecStop=/bin/sleep 5
 ExecStop=/usr/bin/screen -p 0 -S mc -X eval 'stuff "save-all"\015'
+ExecStop=/bin/sleep 5
 ExecStop=/usr/bin/screen -p 0 -S mc -X eval 'stuff "stop"\015'
+ExecStop=/bin/sleep 5
 
 [Install]
 WantedBy=multi-user.target
