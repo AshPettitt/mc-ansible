@@ -31,3 +31,4 @@
   loop:
     - tools
     - server
+    - server/backups
