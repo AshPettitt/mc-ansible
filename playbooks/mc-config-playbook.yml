@@ -1,1 +1,25 @@
-# tags for different tasks
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Backup world
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-backup.yml
+      tags:
+        - upgrade
+
+    - name: Stop Minecraft service
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-service.yml
+      vars:
+        SERVICE_STATE: stop
+      tags:
+        - upgrade
+
+    # move existing files, excluding backups
+    # download new modpack
+    # setup new modpack
+    # restore backup

@@ -1,4 +1,8 @@
 ---
+- name: Notify of backup start
+  command:
+    cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "say Starting Backup..."\015'
+
 - name: Stop saving
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-off"\015'
@@ -16,3 +20,7 @@
 - name: Start saving
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-on"\015'
+
+- name: Notify of backup finish
+  command:
+    cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "say Backup Complete"\015'

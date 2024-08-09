@@ -1,0 +1,13 @@
+---
+- name: Stop Minecraft service
+  systemd:
+    name: minecraft
+    state: stopped
+    ignore_errors: true
+  when: SERVICE_STATE == "stop"  
+
+- name: Start Minecraft service
+  systemd:
+    name: minecraft
+    state: started
+  when: SERVICE_STATE == "start" 
