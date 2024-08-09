@@ -1,0 +1,21 @@
+---
+- name: Get list of all files recursively
+  find:
+    path: /opt/minecraft/server/
+    recurse: yes
+  register: modpack_objects
+
+- name: Delete all files and directories except exclusions
+  file:
+    path: "{{ item.path }}"
+    state: absent
+    recurse: true
+  vars:
+    keep_these:
+      - /opt/minecraft/server/backups
+      - /opt/minecraft/server/world
+      - /opt/minecraft/server/eula.txt
+      - /opt/minecraft/server/server.properties
+      - /opt/minecraft/server/whitelist.json
+  with_items: "{{ modpack_objects.files }}"
+  when: item.path not in keep_these

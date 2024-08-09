@@ -1,9 +1,4 @@
 ---
-- assert:
-    that:
-      - MODPACK_URL is defined
-      - MODPACK_TYPE is defined
-
 - name: Download modpack
   command:
     cmd: curl -JLO {{ MODPACK_URL }}
@@ -61,16 +56,3 @@
 - name: Change ownership of Minecraft directory
   command:
     cmd: chown -R minecraft:minecraft /opt/minecraft
-
-- name: Reload systemd to recognize the new service
-  command: systemctl daemon-reload
-
-- name: Enable Minecraft service
-  systemd:
-    name: minecraft
-    enabled: yes
-
-- name: Start Minecraft service
-  systemd:
-    name: minecraft
-    state: started

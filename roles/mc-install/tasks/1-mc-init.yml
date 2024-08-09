@@ -32,3 +32,14 @@
     - tools
     - server
     - server/backups
+
+- name: Clone mcrcon repository
+  git:
+    repo: https://github.com/Tiiffi/mcrcon.git
+    dest: /opt/minecraft/tools/mcrcon
+
+- name: Compile mcrcon
+  command:
+    cmd: gcc -std=gnu11 -pedantic -Wall -Wextra -O2 -s -o mcrcon mcrcon.c
+  args:
+    chdir: /opt/minecraft/tools/mcrcon

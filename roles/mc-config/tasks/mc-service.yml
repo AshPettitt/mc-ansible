@@ -1,4 +1,14 @@
 ---
+- name: Reload systemd to recognize the new service
+  command: systemctl daemon-reload
+  when: SERVICE_STATE == "enable"
+
+- name: Enable Minecraft service
+  systemd:
+    name: minecraft
+    enabled: yes
+  when: SERVICE_STATE == "enable"
+
 - name: Stop Minecraft service
   systemd:
     name: minecraft
