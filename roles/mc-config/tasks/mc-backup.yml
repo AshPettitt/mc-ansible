@@ -20,7 +20,7 @@
 - name: Compress world directory
   archive:
     path: /opt/minecraft/server/world
-    dest: /opt/minecraft/server/backup/{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}.zip
+    dest: /opt/minecraft/server/backups/{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}.zip
     format: zip
   tags:
     - always
