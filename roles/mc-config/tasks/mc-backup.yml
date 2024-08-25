@@ -2,25 +2,37 @@
 - name: Notify of backup start
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "say Starting Backup..."\015'
+  tags:
+    - always
 
 - name: Stop saving
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-off"\015'
+  tags:
+    - always
 
 - name: Initiate save
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-all"\015'
+  tags:
+    - always
 
 - name: Compress world directory
   archive:
     path: /opt/minecraft/server/world
     dest: /opt/minecraft/server/backup/{{ ansible_date_time.date }}-{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}.zip
     format: zip
+  tags:
+    - always
 
 - name: Start saving
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-on"\015'
+  tags:
+    - always
 
 - name: Notify of backup finish
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "say Backup Complete"\015'
+  tags:
+    - always

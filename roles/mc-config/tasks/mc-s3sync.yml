@@ -1,3 +1,5 @@
 ---
 - name: Sync to S3 bucket
   command: aws s3 sync {{ SYNC_SOURCE }} s3://{{ S3_BUCKET }}
+  tags:
+    - always

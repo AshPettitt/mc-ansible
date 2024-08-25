@@ -4,11 +4,15 @@
     cmd: curl -JLO {{ MODPACK_URL }}
   args:
     chdir: /opt/minecraft/server
+  tags:
+    - always
 
 - name: Make modpack script executable
   file:
     path: /opt/minecraft/server/{{ MODPACK_SCRIPT }}
     mode: '0755'
+  tags:
+    - always
   when: MODPACK_TYPE == "ftb"
 
 - name: Run modpack script
@@ -16,6 +20,8 @@
     cmd: ./{{ MODPACK_SCRIPT }} --auto
   args:
     chdir: /opt/minecraft/server
+  tags:
+    - always
   when: MODPACK_TYPE == "ftb"
 
 - name: Unzip modpack
@@ -23,36 +29,50 @@
     cmd: unzip download
   args:
     chdir: /opt/minecraft/server
+  tags:
+    - always
   when: MODPACK_TYPE == "curse"
 
 - name: Move modpack files
   copy:
     src: /opt/minecraft/server/{{ MODPACK_VERSION }}/
     dest: /opt/minecraft/server/
+  tags:
+    - always
   when: MODPACK_TYPE == "curse"
 
 - name: Rename modpack script
   command:
     cmd: mv /opt/minecraft/server/startserver.sh /opt/minecraft/server/start.sh
+  tags:
+    - always
   when: MODPACK_TYPE == "curse"
 
 - name: Remove original modpack files after copy
   file:
     path: /opt/minecraft/server/{{ MODPACK_VERSION }}/
     state: absent
+  tags:
+    - always
   when: MODPACK_TYPE == "curse"
 
 - name: Remove modpack download after unzip
   file:
     path: /opt/minecraft/server/download
     state: absent
+  tags:
+    - always
   when: MODPACK_TYPE == "curse"
 
 - name: Make start.sh executable
   file:
     path: /opt/minecraft/server/start.sh
     mode: '0755'
+  tags:
+    - always
 
 - name: Change ownership of Minecraft directory
   command:
     cmd: chown -R minecraft:minecraft /opt/minecraft
+  tags:
+    - always
