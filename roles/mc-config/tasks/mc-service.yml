@@ -17,7 +17,7 @@
   systemd:
     name: minecraft
     state: stopped
-    ignore_errors: true
+  ignore_errors: true
   tags:
     - always
   when: SERVICE_STATE == "stop"  
