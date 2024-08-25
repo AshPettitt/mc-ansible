@@ -22,7 +22,21 @@
         name: roles/mc-install
         tasks_from: 2-mc-files.yml
 
-    - name: Install and configure FTB server
+    - name: Install modpack
       include_role:
-        name: roles/mc-install
-        tasks_from: 3-mc-server.yml
+        name: roles/mc-config
+        tasks_from: mc-modpack.yml
+
+    - name: Enable Minecraft service
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-service.yml
+      vars:
+        SERVICE_STATE: enable
+
+    - name: Start Minecraft service
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-service.yml
+      vars:
+        SERVICE_STATE: start

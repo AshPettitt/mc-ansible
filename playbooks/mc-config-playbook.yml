@@ -1,1 +1,56 @@
-# tags for different tasks
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Backup world
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-backup.yml
+      tags:
+        - upgrade
+        - backup
+
+    - name: Backup sync
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-s3sync.yml
+      vars:
+        SYNC_SOURCE: /opt/minecraft/server/backups
+      tags:
+        - upgrade
+        - backup
+
+    - name: Stop Minecraft service
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-service.yml
+      vars:
+        SERVICE_STATE: stop
+      tags:
+        - upgrade
+        - service_stop
+
+    - name: Clean up existing modpack
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-upgrade-prep.yml
+      tags:
+        - upgrade
+
+    - name: Setup modpack
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-modpack.yml
+      tags:
+        - upgrade
+
+    - name: Start Minecraft service
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-service.yml
+      vars:
+        SERVICE_STATE: start
+      tags:
+        - upgrade
+        - service_start
