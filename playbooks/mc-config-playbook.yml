@@ -2,6 +2,8 @@
 - hosts: localhost
   connection: local
   gather_facts: false
+  become: true
+  become_user: minecraft
 
   tasks:
     - name: Backup world
