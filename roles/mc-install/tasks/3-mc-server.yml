@@ -32,7 +32,7 @@
 
 - name: Move modpack files
   copy:
-    src: /opt/minecraft/server/{{ MODPACK_VERSION }}/
+    src: /opt/minecraft/server/server-{{ MODPACK_VERSION }}/
     dest: /opt/minecraft/server/
   when: MODPACK_TYPE == "curse"
 
