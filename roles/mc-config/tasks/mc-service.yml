@@ -37,3 +37,4 @@
     msg: "Minecraft service is {{ minecraft_service.state }}"
   tags:
     - always
+  when: SERVICE_STATE == "start"
