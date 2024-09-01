@@ -18,6 +18,7 @@
     name: minecraft
     state: stopped
   ignore_errors: true
+  register: minecraft_service
   tags:
     - always
   when: SERVICE_STATE == "stop"  
@@ -26,6 +27,13 @@
   systemd:
     name: minecraft
     state: started
+  register: minecraft_service
   tags:
     - always
   when: SERVICE_STATE == "start" 
+
+- name: Check Minecraft service state
+  debug:
+    msg: "Minecraft service is {{ minecraft_service.state }}"
+  tags:
+    - always
