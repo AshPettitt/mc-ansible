@@ -15,4 +15,4 @@
   loop: "{{ modpack_objects.files }}"
   tags:
     - always
-  when: item.path not in keep_these and item.path | none | match_any(keep_these)
+  when: item.path not in keep_these and (keep_these | select('search', '^' + item.path) | list | length == 0)
