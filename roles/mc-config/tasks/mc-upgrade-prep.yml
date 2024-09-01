@@ -7,15 +7,6 @@
   tags:
     - always
 
-- name: Define list of paths to keep
-  vars:
-    keep_these:
-      - /opt/minecraft/server/backups
-      - /opt/minecraft/server/world
-      - /opt/minecraft/server/eula.txt
-      - /opt/minecraft/server/server.properties
-      - /opt/minecraft/server/whitelist.json
-
 - name: Delete all files and directories except exclusions
   file:
     path: "{{ item.path }}"

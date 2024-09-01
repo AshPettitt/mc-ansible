@@ -38,6 +38,13 @@
       include_role:
         name: roles/mc-config
         tasks_from: mc-upgrade-prep.yml
+      vars:
+        keep_these:
+          - /opt/minecraft/server/backups
+          - /opt/minecraft/server/world
+          - /opt/minecraft/server/eula.txt
+          - /opt/minecraft/server/server.properties
+          - /opt/minecraft/server/whitelist.json
       tags:
         - upgrade
 
