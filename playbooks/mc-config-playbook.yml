@@ -13,6 +13,7 @@
       tags:
         - upgrade
         - backup
+        - restart
 
     - name: Backup sync
       include_role:
@@ -23,6 +24,7 @@
       tags:
         - upgrade
         - backup
+        - restart
 
     - name: Stop Minecraft service
       include_role:
@@ -33,6 +35,7 @@
       tags:
         - upgrade
         - service_stop
+        - restart
 
     - name: Clean up existing modpack
       include_role:
@@ -57,3 +60,4 @@
       tags:
         - upgrade
         - service_start
+        - restart
