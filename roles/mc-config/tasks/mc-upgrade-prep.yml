@@ -1,18 +1,16 @@
 ---
-- name: Get list of all files recursively
-  find:
-    path: /opt/minecraft/server/
-    recurse: yes
-  register: modpack_objects
+- name: Delete modpack files and directories except exclusions
+  command: >
+    find /opt/minecraft/server/ -mindepth 1 
+    ! -path /opt/minecraft/server/backups
+    ! -path /opt/minecraft/server/backups/*
+    ! -path /opt/minecraft/server/world
+    ! -path /opt/minecraft/server/world/*
+    ! -path /opt/minecraft/server/eula.txt
+    ! -path /opt/minecraft/server/server.properties
+    ! -path /opt/minecraft/server/whitelist.json
+    -exec rm -rf {} +
+  args:
+    warn: false
   tags:
     - always
-
-- name: Delete all files and directories except exclusions
-  file:
-    path: "{{ item.path }}"
-    state: absent
-    recurse: true
-  loop: "{{ modpack_objects.files }}"
-  tags:
-    - always
-  when: item.path not in keep_these and (keep_these | select('search', '^' + item.path) | list | length == 0)
