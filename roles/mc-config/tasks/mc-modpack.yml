@@ -33,13 +33,20 @@
     - always
   when: MODPACK_TYPE == "curse"
 
+- name: Check if modpack version directory exists
+  stat:
+    path: /opt/minecraft/server/server-{{ MODPACK_VERSION }}
+  register: modpack_directory
+
 - name: Move modpack files
   copy:
     src: /opt/minecraft/server/server-{{ MODPACK_VERSION }}/
     dest: /opt/minecraft/server/
   tags:
     - always
-  when: MODPACK_TYPE == "curse"
+  when:
+    - MODPACK_TYPE == "curse"
+    - modpack_directory.stat.exists
 
 - name: Rename modpack script
   command:
