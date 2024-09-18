@@ -36,6 +36,8 @@
 - name: Check if modpack version directory exists
   stat:
     path: /opt/minecraft/server/server-{{ MODPACK_VERSION }}
+  tags:
+    - always
   register: modpack_directory
 
 - name: Move modpack files
