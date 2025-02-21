@@ -17,7 +17,7 @@
 
 - name: Run modpack script
   command:
-    cmd: ./{{ MODPACK_SCRIPT }} --auto
+    cmd: ./{{ MODPACK_SCRIPT }} --auto --force
   args:
     chdir: /opt/minecraft/server
   tags:
