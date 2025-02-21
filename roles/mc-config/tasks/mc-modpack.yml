@@ -50,12 +50,22 @@
     - MODPACK_TYPE == "curse"
     - modpack_directory.stat.exists
 
-- name: Rename modpack script
-  command:
-    cmd: mv /opt/minecraft/server/startserver.sh /opt/minecraft/server/start.sh
+- name: Find existing start script
+  find:
+    paths: /opt/minecraft/server
+    patterns: "startserver.sh,start-server.sh,run.sh"
+    file_type: file
+  register: found_scripts
   tags:
     - always
-  when: MODPACK_TYPE == "curse"
+
+- name: Rename found script to start.sh
+  command:
+    cmd: mv "{{ item.path }}" /opt/minecraft/server/start.sh
+  loop: "{{ found_scripts.files }}"
+  when: found_scripts.matched > 0
+  tags:
+    - always
 
 - name: Remove original modpack files after copy
   file:
