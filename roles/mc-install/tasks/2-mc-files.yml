@@ -29,3 +29,9 @@
     dest: /opt/minecraft/server/whitelist.json
     mode: '0644'
   when: WHITELIST is defined and WHITELIST_ENABLE | bool
+
+- name: Create Minecraft sudoers file
+  template:
+    src: minecraft.sudo.j2
+    dest: /etc/sudoers.d/minecraft
+    mode: '0644'
