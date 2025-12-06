@@ -9,6 +9,7 @@
     ! -path /opt/minecraft/server/eula.txt
     ! -path /opt/minecraft/server/server.properties
     ! -path /opt/minecraft/server/whitelist.json
+    ! -path /opt/minecraft/server/ops.json
     -exec rm -rf {} +
   args:
     warn: false
