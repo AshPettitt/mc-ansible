@@ -23,5 +23,7 @@
       - /opt/minecraft/server/server.properties
       - /opt/minecraft/server/whitelist.json
       - /opt/minecraft/server/ops.json
+  loop_control:
+    label: "{{ item.path }}"
   tags:
     - always
