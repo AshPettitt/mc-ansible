@@ -1,29 +1,27 @@
 ---
-- name: Find all items in minecraft server directory (recursive)
-  find:
-    paths: /opt/minecraft/server/
-    file_type: any
-    recurse: yes
-  register: server_contents
+- name: Count and delete modpack files except exclusions
+  shell: |
+    FILES=$(find /opt/minecraft/server/ -mindepth 1 \
+      ! -path '/opt/minecraft/server/backups' \
+      ! -path '/opt/minecraft/server/backups/*' \
+      ! -path '/opt/minecraft/server/world' \
+      ! -path '/opt/minecraft/server/world/*' \
+      ! -path '/opt/minecraft/server/eula.txt' \
+      ! -path '/opt/minecraft/server/server.properties' \
+      ! -path '/opt/minecraft/server/whitelist.json' \
+      ! -path '/opt/minecraft/server/ops.json')
+    COUNT=$(echo "$FILES" | grep -c .)
+    echo "$FILES" | xargs -d '\n' rm -rf
+    echo "Deleted $COUNT items"
+  args:
+    executable: /bin/bash
+  register: deletion_result
+  changed_when: true
   tags:
     - always
 
-- name: Delete modpack files except exclusions
-  file:
-    path: "{{ item.path }}"
-    state: absent
-  loop: "{{ server_contents.files }}"
-  when: >
-    '/opt/minecraft/server/backups' not in item.path and
-    '/opt/minecraft/server/world' not in item.path and
-    item.path not in excluded_files
-  vars:
-    excluded_files:
-      - /opt/minecraft/server/eula.txt
-      - /opt/minecraft/server/server.properties
-      - /opt/minecraft/server/whitelist.json
-      - /opt/minecraft/server/ops.json
-  loop_control:
-    label: "{{ item.path }}"
+- name: Display deletion count
+  debug:
+    msg: "{{ deletion_result.stdout }}"
   tags:
     - always
