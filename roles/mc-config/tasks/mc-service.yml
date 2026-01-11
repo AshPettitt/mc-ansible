@@ -1,6 +1,8 @@
 ---
 - name: Reload systemd to recognize the new service
   command: systemctl daemon-reload
+  become: true
+  become_user: root
   tags:
     - always
   when: SERVICE_STATE == "enable"
@@ -9,6 +11,8 @@
   systemd:
     name: minecraft
     enabled: yes
+  become: true
+  become_user: root
   tags:
     - always
   when: SERVICE_STATE == "enable"
@@ -18,6 +22,8 @@
     name: minecraft
     state: stopped
   ignore_errors: true
+  become: true
+  become_user: root
   register: minecraft_service
   tags:
     - always
@@ -27,6 +33,8 @@
   systemd:
     name: minecraft
     state: started
+  become: true
+  become_user: root
   register: minecraft_service
   tags:
     - always
