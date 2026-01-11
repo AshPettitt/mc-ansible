@@ -4,6 +4,11 @@
     name: gcc
     state: present
 
+- name: Ensure polkit is installed
+  package:
+    name: polkit
+    state: present
+
 - name: Ensure java is installed
   package:
     name: java
