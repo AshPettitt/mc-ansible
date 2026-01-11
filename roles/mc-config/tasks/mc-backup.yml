@@ -2,18 +2,30 @@
 - name: Notify of backup start
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "say Starting Backup..."\015'
+  register: backup_notify_result
+  failed_when: 
+    - backup_notify_result.rc != 0
+    - '"No screen session found" not in backup_notify_result.stdout'
   tags:
     - always
 
 - name: Stop saving
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-off"\015'
+  register: stop_save_result
+  failed_when: 
+    - stop_save_result.rc != 0
+    - '"No screen session found" not in stop_save_result.stdout'
   tags:
     - always
 
 - name: Initiate save
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-all"\015'
+  register: init_save_result
+  failed_when: 
+    - init_save_result.rc != 0
+    - '"No screen session found" not in init_save_result.stdout'
   tags:
     - always
 
@@ -28,11 +40,19 @@
 - name: Start saving
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "save-on"\015'
+  register: start_save_result
+  failed_when: 
+    - start_save_result.rc != 0
+    - '"No screen session found" not in start_save_result.stdout'
   tags:
     - always
 
 - name: Notify of backup finish
   command:
     cmd: /usr/bin/screen -p 0 -S mc -X eval 'stuff "say Backup Complete"\015'
+  register: backup_finish_notify_result
+  failed_when: 
+    - backup_finish_notify_result.rc != 0
+    - '"No screen session found" not in backup_finish_notify_result.stdout'
   tags:
     - always
