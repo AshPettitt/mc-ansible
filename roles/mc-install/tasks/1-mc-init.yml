@@ -11,7 +11,7 @@
 
 - name: Ensure java is installed
   package:
-    name: java-21-openjdk
+    name: java
     state: present
 
 - name: Create Minecraft group
