@@ -83,6 +83,13 @@
     - always
   when: MODPACK_TYPE == "curse"
 
+- name: Create start.sh for vanilla server
+  copy:
+    dest: /opt/minecraft/server/start.sh
+    content: |
+      java -Xmx6G -Xms6G -jar server.jar nogui
+  when: MODPACK_TYPE == "vanilla"
+
 - name: Make start.sh executable
   file:
     path: /opt/minecraft/server/start.sh
