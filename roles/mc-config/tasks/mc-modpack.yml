@@ -88,6 +88,8 @@
     dest: /opt/minecraft/server/start.sh
     content: |
       java -Xmx6G -Xms6G -jar server.jar nogui
+  tags:
+    - always
   when: MODPACK_TYPE == "vanilla"
 
 - name: Make start.sh executable
