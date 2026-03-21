@@ -1,0 +1,21 @@
+# Managed by Ansible — do not edit manually.
+[Unit]
+Description=Minecraft Idle Shutdown Check
+After=network.target
+ConditionPathExists=/usr/local/bin/mc-idle-shutdown.sh
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/mc-idle-shutdown.sh
+User=root
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mc-idle-shutdown
+
+# All vars are asserted and supplied by Ansible — no defaults here
+Environment=MC_PORT={{ mc_port }}
+Environment=MC_STATE_FILE={{ mc_state_file }}
+Environment=MC_IDLE_CYCLES_THRESHOLD={{ mc_idle_cycles_threshold }}
+
+[Install]
+WantedBy=multi-user.target
