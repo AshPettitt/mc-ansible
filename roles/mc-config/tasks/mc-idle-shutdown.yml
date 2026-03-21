@@ -14,6 +14,8 @@
       Set them in extra-environment-vars.yml or defaults/main.yml.
       Required: mc_port, mc_state_file, mc_idle_cycles_threshold,
       mc_idle_timer_boot_delay, mc_idle_timer_interval.
+  tags:
+    - always
 
 - name: Create mc-idle-shutdown state directory
   ansible.builtin.file:
@@ -22,6 +24,8 @@
     owner: root
     group: root
     mode: "0755"
+  tags:
+    - always
 
 - name: Deploy mc-idle-shutdown script
   ansible.builtin.template:
@@ -31,6 +35,8 @@
     group: root
     mode: "0755"
   notify: Restart mc-idle-shutdown timer
+  tags:
+    - always
 
 - name: Deploy mc-idle-shutdown systemd service
   ansible.builtin.template:
@@ -42,6 +48,8 @@
   notify:
     - Reload systemd daemon
     - Restart mc-idle-shutdown timer
+  tags:
+    - always
 
 - name: Deploy mc-idle-shutdown systemd timer
   ansible.builtin.template:
@@ -53,6 +61,8 @@
   notify:
     - Reload systemd daemon
     - Restart mc-idle-shutdown timer
+  tags:
+    - always
 
 - name: Enable and start mc-idle-shutdown timer
   ansible.builtin.systemd:
@@ -60,3 +70,5 @@
     enabled: true
     state: started
     daemon_reload: true
+  tags:
+    - always
