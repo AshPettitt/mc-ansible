@@ -4,6 +4,8 @@
   gather_facts: true
   become: true
   become_user: minecraft
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: Backup world
