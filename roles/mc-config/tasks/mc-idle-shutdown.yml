@@ -1,0 +1,74 @@
+---
+# Deploys the Minecraft idle shutdown script, systemd service, and timer.
+
+- name: Assert required idle shutdown variables are defined
+  assert:
+    that:
+      - mc_port is defined
+      - mc_state_file is defined
+      - mc_idle_cycles_threshold is defined
+      - mc_idle_timer_boot_delay is defined
+      - mc_idle_timer_interval is defined
+    fail_msg: >
+      One or more required mc-idle-shutdown variables are not defined.
+      Set them in extra-environment-vars.yml or defaults/main.yml.
+      Required: mc_port, mc_state_file, mc_idle_cycles_threshold,
+      mc_idle_timer_boot_delay, mc_idle_timer_interval.
+  tags:
+    - always
+
+- name: Create mc-idle-shutdown state directory
+  ansible.builtin.file:
+    path: "{{ mc_state_file | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  tags:
+    - always
+
+- name: Deploy mc-idle-shutdown script
+  ansible.builtin.template:
+    src: mc-idle-shutdown.sh.j2
+    dest: /usr/local/bin/mc-idle-shutdown.sh
+    owner: root
+    group: root
+    mode: "0755"
+  notify: Restart mc-idle-shutdown timer
+  tags:
+    - always
+
+- name: Deploy mc-idle-shutdown systemd service
+  ansible.builtin.template:
+    src: mc-idle-shutdown.service.j2
+    dest: /etc/systemd/system/mc-idle-shutdown.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd daemon
+    - Restart mc-idle-shutdown timer
+  tags:
+    - always
+
+- name: Deploy mc-idle-shutdown systemd timer
+  ansible.builtin.template:
+    src: mc-idle-shutdown.timer.j2
+    dest: /etc/systemd/system/mc-idle-shutdown.timer
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd daemon
+    - Restart mc-idle-shutdown timer
+  tags:
+    - always
+
+- name: Enable and start mc-idle-shutdown timer
+  ansible.builtin.systemd:
+    name: mc-idle-shutdown.timer
+    enabled: true
+    state: started
+    daemon_reload: true
+  tags:
+    - always

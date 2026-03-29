@@ -1,0 +1,12 @@
+---
+# handlers/main.yml (add these to your existing handlers if the file already exists)
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart mc-idle-shutdown timer
+  ansible.builtin.systemd:
+    name: mc-idle-shutdown.timer
+    state: restarted
+    enabled: true

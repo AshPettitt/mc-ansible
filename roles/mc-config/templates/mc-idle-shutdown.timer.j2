@@ -1,0 +1,14 @@
+# Managed by Ansible — do not edit manually.
+[Unit]
+Description=Minecraft Idle Shutdown Timer
+Requires=mc-idle-shutdown.service
+
+[Timer]
+# All vars are asserted and supplied by Ansible — no defaults here
+OnBootSec={{ mc_idle_timer_boot_delay }}
+OnUnitActiveSec={{ mc_idle_timer_interval }}
+Unit=mc-idle-shutdown.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target

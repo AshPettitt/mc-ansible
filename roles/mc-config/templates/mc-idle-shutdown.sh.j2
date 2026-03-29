@@ -1,0 +1,46 @@
+#!/bin/sh
+# Managed by Ansible — do not edit manually.
+# Short-lived idle check. Reads/writes state to STATE_FILE and shuts down
+# once MC_IDLE_CYCLES_THRESHOLD consecutive idle cycles have been recorded.
+#
+# All configuration is injected via environment variables by the systemd
+# service unit. Do not set fallback defaults here — use Ansible vars.
+# Intended to be driven by a systemd timer — this script exits immediately
+# after each check.
+
+# Ensure state directory exists
+STATE_DIR="$(dirname "$MC_STATE_FILE")"
+if [ ! -d "$STATE_DIR" ]; then
+    mkdir -p "$STATE_DIR"
+fi
+
+# Read current idle cycle count (default 0 if file missing or invalid)
+if [ -f "$MC_STATE_FILE" ]; then
+    idle_cycles=$(cat "$MC_STATE_FILE" 2>/dev/null)
+    case "$idle_cycles" in
+        ''|*[!0-9]*) idle_cycles=0 ;;
+    esac
+else
+    idle_cycles=0
+fi
+
+# Check for active TCP connections on the configured port (Minecraft Java Edition)
+connection_count=$(ss -lnt | awk -v port=":$MC_PORT" '$4 ~ port {count++} END {print count+0}')
+
+if [ "$connection_count" -gt 0 ]; then
+    # Active connections — reset idle counter
+    idle_cycles=0
+    echo "0" > "$MC_STATE_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [mc-idle-shutdown] Activity detected on port $MC_PORT ($connection_count connection(s)). Idle counter reset to 0/$MC_IDLE_CYCLES_THRESHOLD."
+else
+    # No connections — increment idle counter
+    idle_cycles=$(( idle_cycles + 1 ))
+    echo "$idle_cycles" > "$MC_STATE_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [mc-idle-shutdown] No activity on port $MC_PORT. Idle cycle $idle_cycles/$MC_IDLE_CYCLES_THRESHOLD."
+
+    if [ "$idle_cycles" -ge "$MC_IDLE_CYCLES_THRESHOLD" ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') [mc-idle-shutdown] Idle threshold reached ($idle_cycles/$MC_IDLE_CYCLES_THRESHOLD). Shutting down."
+        rm -f "$MC_STATE_FILE"
+        /sbin/shutdown -h now
+    fi
+fi
