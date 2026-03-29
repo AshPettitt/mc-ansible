@@ -4,9 +4,13 @@
 - name: Reload systemd daemon
   ansible.builtin.systemd:
     daemon_reload: true
+  become: true
+  become_user: root
 
 - name: Restart mc-idle-shutdown timer
   ansible.builtin.systemd:
     name: mc-idle-shutdown.timer
     state: restarted
     enabled: true
+  become: true
+  become_user: root
