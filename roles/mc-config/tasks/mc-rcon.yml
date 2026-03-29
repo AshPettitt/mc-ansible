@@ -17,6 +17,6 @@
 
 - name: Show mcrcon output
   ansible.builtin.debug:
-    msg: "{{ mcrcon_output.stdout }}"
+    var: mcrcon_output.stdout
   tags:
     - always
