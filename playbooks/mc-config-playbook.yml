@@ -70,3 +70,21 @@
         SERVICE_STATE: start
       tags:
         - idle-shutdown
+
+    - name: Add an op
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-rcon.yml
+      vars:
+        RCON_COMMAND: "op {{ op_name }}"
+      tags:
+        - op
+
+    - name: Remove an op
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-rcon.yml
+      vars:
+        RCON_COMMAND: "deop {{ op_name }}"
+      tags:
+        - deop
