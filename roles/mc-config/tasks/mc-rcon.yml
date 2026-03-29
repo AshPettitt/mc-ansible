@@ -1,7 +1,6 @@
 ---
 - name: Send command to Minecraft server via mcrcon
-  ansible.builtin.command:
-    cmd: >
+  ansible.builtin.command: >
       /opt/minecraft/tools/mcrcon
       -H localhost
       -P {{ RCON_PORT | default(25575) }}
