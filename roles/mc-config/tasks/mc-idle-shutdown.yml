@@ -19,38 +19,38 @@
 
 - name: Create mc-idle-shutdown state directory
   ansible.builtin.file:
-    become: true
-    become_user: root
     path: "{{ mc_state_file | dirname }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
+  become: true
+  become_user: root
   tags:
     - always
 
 - name: Deploy mc-idle-shutdown script
   ansible.builtin.template:
-    become: true
-    become_user: root
     src: mc-idle-shutdown.sh.j2
     dest: /usr/local/bin/mc-idle-shutdown.sh
     owner: root
     group: root
     mode: "0755"
+  become: true
+  become_user: root
   notify: Restart mc-idle-shutdown timer
   tags:
     - always
 
 - name: Deploy mc-idle-shutdown systemd service
   ansible.builtin.template:
-    become: true
-    become_user: root
     src: mc-idle-shutdown.service.j2
     dest: /etc/systemd/system/mc-idle-shutdown.service
     owner: root
     group: root
     mode: "0644"
+  become: true
+  become_user: root
   notify:
     - Reload systemd daemon
     - Restart mc-idle-shutdown timer
@@ -59,13 +59,13 @@
 
 - name: Deploy mc-idle-shutdown systemd timer
   ansible.builtin.template:
-    become: true
-    become_user: root
     src: mc-idle-shutdown.timer.j2
     dest: /etc/systemd/system/mc-idle-shutdown.timer
     owner: root
     group: root
     mode: "0644"
+  become: true
+  become_user: root
   notify:
     - Reload systemd daemon
     - Restart mc-idle-shutdown timer
@@ -74,11 +74,11 @@
 
 - name: Enable and start mc-idle-shutdown timer
   ansible.builtin.systemd:
-    become: true
-    become_user: root
     name: mc-idle-shutdown.timer
     enabled: true
     state: started
     daemon_reload: true
+  become: true
+  become_user: root
   tags:
     - always
