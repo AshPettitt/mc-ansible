@@ -71,7 +71,7 @@
       tags:
         - idle-shutdown
 
-    - name: Add an op
+    - name: Add op - {{ op_name }}
       include_role:
         name: roles/mc-config
         tasks_from: mc-rcon.yml
@@ -80,7 +80,7 @@
       tags:
         - op
 
-    - name: Remove an op
+    - name: Remove op - {{ op_name }}
       include_role:
         name: roles/mc-config
         tasks_from: mc-rcon.yml
