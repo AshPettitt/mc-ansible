@@ -61,3 +61,12 @@
         - upgrade
         - service_start
         - restart
+
+    - name: Deploy idle shutdown
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-idle-shutdown.yml
+      vars:
+        SERVICE_STATE: start
+      tags:
+        - idle-shutdown
