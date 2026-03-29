@@ -19,6 +19,8 @@
 
 - name: Create mc-idle-shutdown state directory
   ansible.builtin.file:
+    become: true
+    become_user: root
     path: "{{ mc_state_file | dirname }}"
     state: directory
     owner: root
@@ -29,6 +31,8 @@
 
 - name: Deploy mc-idle-shutdown script
   ansible.builtin.template:
+    become: true
+    become_user: root
     src: mc-idle-shutdown.sh.j2
     dest: /usr/local/bin/mc-idle-shutdown.sh
     owner: root
@@ -40,6 +44,8 @@
 
 - name: Deploy mc-idle-shutdown systemd service
   ansible.builtin.template:
+    become: true
+    become_user: root
     src: mc-idle-shutdown.service.j2
     dest: /etc/systemd/system/mc-idle-shutdown.service
     owner: root
@@ -53,6 +59,8 @@
 
 - name: Deploy mc-idle-shutdown systemd timer
   ansible.builtin.template:
+    become: true
+    become_user: root
     src: mc-idle-shutdown.timer.j2
     dest: /etc/systemd/system/mc-idle-shutdown.timer
     owner: root
@@ -66,6 +74,8 @@
 
 - name: Enable and start mc-idle-shutdown timer
   ansible.builtin.systemd:
+    become: true
+    become_user: root
     name: mc-idle-shutdown.timer
     enabled: true
     state: started
