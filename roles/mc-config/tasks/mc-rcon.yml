@@ -12,11 +12,15 @@
       - "{{ RCON_COMMAND }}"
   register: mcrcon_output
   changed_when: false
+  become: true
+  become_user: root
   tags:
     - always
 
 - name: Show mcrcon output
   ansible.builtin.debug:
     msg: "{{ mcrcon_output.stdout }}"
+  become: true
+  become_user: root
   tags:
     - always
