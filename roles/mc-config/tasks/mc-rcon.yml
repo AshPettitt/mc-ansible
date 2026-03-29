@@ -15,8 +15,8 @@
   tags:
     - always
 
-- name: Show mcrcon output
+- name: "mcrcon stdout: {{ mcrcon_output.stdout }} stderr: {{ mcrcon_output.stderr }}"
   ansible.builtin.debug:
-    var: mcrcon_output.stdout
+    msg: "see task name"
   tags:
     - always
