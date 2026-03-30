@@ -25,7 +25,7 @@ else
 fi
 
 # Check for active TCP connections on the configured port (Minecraft Java Edition)
-connection_count=$(ss -nt state established | awk -v port=":$MC_PORT" '$4 ~ port {count++} END {print count+0}')
+connection_count=$(ss -nt state established | awk -v port=":$MC_PORT" '$0 ~ port {count++} END {print count+0}')
 
 if [ "$connection_count" -gt 0 ]; then
     # Active connections — reset idle counter
