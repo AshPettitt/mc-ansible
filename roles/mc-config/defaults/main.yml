@@ -9,6 +9,7 @@
 #   mc_idle_timer_interval x mc_idle_cycles_threshold
 #   e.g. 10min x 12 = 120 minutes of consecutive idleness
 
+mc_idle_shutdown_enabled: true
 mc_port: 25565
 mc_state_file: /var/lib/mc-idle-shutdown/state
 mc_idle_cycles_threshold: 12

@@ -64,14 +64,23 @@
         - service_start
         - restart
 
-    - name: Deploy idle shutdown
+    - name: Enable idle shutdown
       include_role:
         name: roles/mc-config
         tasks_from: mc-idle-shutdown.yml
       vars:
-        SERVICE_STATE: start
+        mc_idle_shutdown_enabled: true
       tags:
-        - idle-shutdown
+        - enable-idle-shutdown
+
+    - name: Disable idle shutdown
+      include_role:
+        name: roles/mc-config
+        tasks_from: mc-idle-shutdown.yml
+      vars:
+        mc_idle_shutdown_enabled: false
+      tags:
+        - disable-idle-shutdown
 
     - name: Add op - {{ op_name }}
       include_role:

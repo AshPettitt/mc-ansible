@@ -4,6 +4,7 @@
 - name: Assert required idle shutdown variables are defined
   assert:
     that:
+      - mc_idle_shutdown_enabled is defined
       - mc_port is defined
       - mc_state_file is defined
       - mc_idle_cycles_threshold is defined
@@ -17,6 +18,29 @@
   tags:
     - always
 
+- name: Stop and disable mc-idle-shutdown timer
+  ansible.builtin.systemd:
+    name: mc-idle-shutdown.timer
+    enabled: false
+    state: stopped
+    daemon_reload: true
+  become: true
+  become_user: root
+  tags:
+    - always
+  when: not mc_idle_shutdown_enabled
+  ignore_errors: true  # Gracefully handle case where timer was never deployed
+ 
+- name: Clear idle shutdown state file
+  ansible.builtin.file:
+    path: "{{ mc_state_file }}"
+    state: absent
+  become: true
+  become_user: root
+  tags:
+    - always
+  when: not mc_idle_shutdown_enabled
+
 - name: Create mc-idle-shutdown state directory
   ansible.builtin.file:
     path: "{{ mc_state_file | dirname }}"
@@ -28,6 +52,7 @@
   become_user: root
   tags:
     - always
+  when: mc_idle_shutdown_enabled
 
 - name: Deploy mc-idle-shutdown script
   ansible.builtin.template:
@@ -41,6 +66,7 @@
   notify: Restart mc-idle-shutdown timer
   tags:
     - always
+  when: mc_idle_shutdown_enabled
 
 - name: Deploy mc-idle-shutdown systemd service
   ansible.builtin.template:
@@ -56,6 +82,7 @@
     - Restart mc-idle-shutdown timer
   tags:
     - always
+  when: mc_idle_shutdown_enabled
 
 - name: Deploy mc-idle-shutdown systemd timer
   ansible.builtin.template:
@@ -71,6 +98,7 @@
     - Restart mc-idle-shutdown timer
   tags:
     - always
+  when: mc_idle_shutdown_enabled
 
 - name: Enable and start mc-idle-shutdown timer
   ansible.builtin.systemd:
@@ -82,3 +110,4 @@
   become_user: root
   tags:
     - always
+  when: mc_idle_shutdown_enabled
